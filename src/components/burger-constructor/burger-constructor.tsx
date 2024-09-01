@@ -33,7 +33,7 @@ export const BurgerConstructor: FC = () => {
   const orderRequest = useSelector(isOrderLoadingSelector);
 
   const onOrderClick = () => {
-    if (userAuthStatus) navigate('/login');
+    if (userAuthStatus) return navigate('/login');
     if (!constructorItems.bun || orderRequest) return;
     else {
       const ingredientsId = constructorItems.ingredients.map(
