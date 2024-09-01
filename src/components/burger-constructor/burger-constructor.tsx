@@ -8,7 +8,10 @@ import {
   burgerConstructorActions,
   burgerIngredientsSelector
 } from '../../services/slices/burger/constructor-slice';
-import { isUserAuthCheckedSelector } from '../../services/slices/user/user-auth-slice';
+import {
+  getUser,
+  isUserAuthCheckedSelector
+} from '../../services/slices/user/user-auth-slice';
 import {
   isOrderLoadingSelector,
   placeBurgerOrder,
@@ -33,7 +36,7 @@ export const BurgerConstructor: FC = () => {
   const orderRequest = useSelector(isOrderLoadingSelector);
 
   const onOrderClick = () => {
-    if (userAuthStatus) return navigate('/login');
+    if (userAuthStatus) navigate('/login');
     if (!constructorItems.bun || orderRequest) return;
     else {
       const ingredientsId = constructorItems.ingredients.map(
@@ -42,6 +45,7 @@ export const BurgerConstructor: FC = () => {
       const bunId = constructorItems.bun._id;
       const orderData = [bunId, ...ingredientsId, bunId];
       dispatch(placeBurgerOrder(orderData));
+      dispatch(getUser());
     }
   };
   const closeOrderModal = () => {
