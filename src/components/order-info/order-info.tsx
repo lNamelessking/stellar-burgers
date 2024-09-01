@@ -6,7 +6,7 @@ import { useSelector, useDispatch } from '../../services/store';
 import { ingredientsSelector } from '../../services/slices/burger/ingredients-slice';
 import {
   getOrderByNumber,
-  someOrderSelector,
+  someOrderSelector
 } from '../../services/slices/user/user-order-slice';
 import { useParams } from 'react-router-dom';
 
