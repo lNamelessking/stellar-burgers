@@ -1,5 +1,5 @@
-/*Данный слайс используется целиком и полностью для авторизации, регистрации,
-логаута, обновления токена пользователя. Thunk's обрабатываются так же через билдер в экстраРедьюсерах*/
+/*Данный слайс используется для логина, логаута, контроля процесса аутентификации,
+регистрации, изменения данных пользователя.*/
 
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { deleteCookie, setCookie } from '../../../utils/cookie';
@@ -42,7 +42,7 @@ export const loginUser = createAsyncThunk(
   async (data: TLoginData) => await loginUserApi(data)
 );
 
-export const refreshUser = createAsyncThunk(
+export const updateUser = createAsyncThunk(
   'user/refreshUser',
   async (data: TRegisterData) => await updateUserApi(data)
 );
@@ -59,7 +59,6 @@ export const userAuthSlice = createSlice({
     builder
       .addCase(getUser.pending, (state) => {
         state.isAuthLoading = true;
-        state.isAuthChecked = false;
       })
       .addCase(getUser.fulfilled, (state, action) => {
         state.isAuthLoading = false;
@@ -69,8 +68,7 @@ export const userAuthSlice = createSlice({
       .addCase(getUser.rejected, (state, action) => {
         state.isAuthLoading = false;
         state.isAuthChecked = true;
-        state.authError =
-          action.error.message || 'Неопознанная ошибка в getUser';
+        state.authError = action.error.message;
       })
       .addCase(registerUser.pending, (state) => {
         state.isAuthLoading = true;
@@ -83,8 +81,7 @@ export const userAuthSlice = createSlice({
       })
       .addCase(registerUser.rejected, (state, action) => {
         state.isAuthLoading = false;
-        state.authError =
-          action.error.message || 'Неопознанная ошибка в registerUser';
+        state.authError = action.error.message;
       })
       .addCase(loginUser.pending, (state) => {
         state.isAuthLoading = true;
@@ -97,20 +94,18 @@ export const userAuthSlice = createSlice({
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.isAuthLoading = false;
-        state.authError =
-          action.error.message || 'Неопознанная ошибка в loginUser';
+        state.authError = action.error.message;
       })
-      .addCase(refreshUser.pending, (state) => {
+      .addCase(updateUser.pending, (state) => {
         state.isAuthLoading = true;
       })
-      .addCase(refreshUser.fulfilled, (state, action) => {
+      .addCase(updateUser.fulfilled, (state, action) => {
         state.isAuthLoading = false;
         state.user = action.payload.user;
       })
-      .addCase(refreshUser.rejected, (state, action) => {
+      .addCase(updateUser.rejected, (state, action) => {
         state.isAuthLoading = false;
-        state.authError =
-          action.error.message || 'Неопознанная ошибка в refreshUser';
+        state.authError = action.error.message;
       })
       .addCase(logoutUser.pending, (state) => {
         state.isAuthLoading = true;
@@ -123,8 +118,7 @@ export const userAuthSlice = createSlice({
       })
       .addCase(logoutUser.rejected, (state, action) => {
         state.isAuthLoading = false;
-        state.authError =
-          action.error.message || 'Неопознанная ошибка в logoutUser';
+        state.authError = action.error.message;
       });
   },
   selectors: {

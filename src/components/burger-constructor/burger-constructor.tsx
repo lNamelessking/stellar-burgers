@@ -10,7 +10,8 @@ import {
 } from '../../services/slices/burger/constructor-slice';
 import {
   getUser,
-  isUserAuthCheckedSelector
+  isUserAuthCheckedSelector,
+  userSelector
 } from '../../services/slices/user/user-auth-slice';
 import {
   isOrderLoadingSelector,
@@ -25,8 +26,8 @@ export const BurgerConstructor: FC = () => {
   const navigate = useNavigate();
   const bun = useSelector(burgerBunSelector);
   const ingredients = useSelector(burgerIngredientsSelector);
-  const userAuthStatus = useSelector(isUserAuthCheckedSelector);
   const orderModalData = useSelector(userOrderSelector);
+  const user = useSelector(userSelector);
 
   const constructorItems = {
     bun: bun,
@@ -36,7 +37,7 @@ export const BurgerConstructor: FC = () => {
   const orderRequest = useSelector(isOrderLoadingSelector);
 
   const onOrderClick = () => {
-    if (userAuthStatus) navigate('/login');
+    if (!user) return navigate('/login');
     if (!constructorItems.bun || orderRequest) return;
     else {
       const ingredientsId = constructorItems.ingredients.map(
