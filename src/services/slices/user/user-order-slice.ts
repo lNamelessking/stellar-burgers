@@ -1,6 +1,6 @@
 /*Данный слайс отвечает за отправку заказа, получение заказов самого пользователя, создаём
 Thunk's, обрабатываем их через builder, единственный экшен который у нас здесь будет это очистка
-заказа когда мы закроем модалку*/
+заказа когда мы закроем модалку готового заказа*/
 
 import { TOrder } from '@utils-types';
 import { getOrderByNumberApi, getOrdersApi, orderBurgerApi } from '@api';
@@ -56,8 +56,7 @@ export const userOrdersSlice = createSlice({
       })
       .addCase(placeBurgerOrder.rejected, (state, action) => {
         state.isOrderLoading = false;
-        state.orderLoadingError =
-          action.error.message || 'Неопознанная ошибка в placeBurgerOrder';
+        state.orderLoadingError = action.error.message;
       })
       .addCase(getUserOrders.pending, (state) => {
         state.isOrderLoading = true;
@@ -68,8 +67,7 @@ export const userOrdersSlice = createSlice({
       })
       .addCase(getUserOrders.rejected, (state, action) => {
         state.isOrderLoading = false;
-        state.orderLoadingError =
-          action.error.message || 'Неопознанная ошибка в getUserOrders';
+        state.orderLoadingError = action.error.message;
       })
       .addCase(getOrderByNumber.pending, (state) => {
         state.isOrderLoading = true;
@@ -80,8 +78,7 @@ export const userOrdersSlice = createSlice({
       })
       .addCase(getOrderByNumber.rejected, (state, action) => {
         state.isOrderLoading = false;
-        state.orderLoadingError =
-          action.error.message || 'Неопознанная ошибка в getOrderByNumber';
+        state.orderLoadingError = action.error.message;
       });
   },
   selectors: {
