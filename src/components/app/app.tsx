@@ -77,6 +77,14 @@ const App = () => {
             </ProtectedRoute>
           }
         />
+        <Route
+          path='/ingredients/:id'
+          element={
+            <div className={styles.detailPageWrap}>
+              <IngredientDetails />
+            </div>
+          }
+        />
         <Route path='*' element={<NotFound404 />} />
       </Routes>
       {background && (
