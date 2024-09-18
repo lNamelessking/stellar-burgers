@@ -29,7 +29,6 @@ const App = () => {
   useEffect(() => {
     dispatch(getIngredients());
     dispatch(getUser());
-    console.log('Тест переноса SSH ключей между пк, пробую коммит и пуш')
   }, [dispatch]);
 
   return (
