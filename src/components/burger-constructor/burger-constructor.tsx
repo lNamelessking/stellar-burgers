@@ -10,7 +10,6 @@ import {
 } from '../../services/slices/burger/constructor-slice';
 import {
   getUser,
-  isUserAuthCheckedSelector,
   userSelector
 } from '../../services/slices/user/user-auth-slice';
 import {

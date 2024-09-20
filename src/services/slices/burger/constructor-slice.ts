@@ -6,13 +6,14 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { v4 as uuid } from 'uuid';
 import { TConstructorIngredient } from '@utils-types';
+import { RootState } from 'src/services/store';
 
-type TBurgerConstructorState = {
+export type TBurgerConstructorState = {
   bun: TConstructorIngredient | null;
   ingredients: TConstructorIngredient[];
 };
 
-const initialState: TBurgerConstructorState = {
+export const initialState: TBurgerConstructorState = {
   bun: null,
   ingredients: []
 };
@@ -62,8 +63,16 @@ export const burgerConstructorSlice = createSlice({
   }
 });
 
-export const burgerBunSelector =
-  burgerConstructorSlice.selectors.burgerBunSelector;
-export const burgerIngredientsSelector =
-  burgerConstructorSlice.selectors.burgerIngredientsSelector;
+/*Исправил все экспорты, исправил rootReducer, ибо не до конца разобрался как протестировать
+инициацию rootReducer с combineSlices */
+
+export const selectBurgerConstructorState = (state: RootState) =>
+  state.burgerConstructor;
+export const burgerBunSelector = (state: RootState) =>
+  selectBurgerConstructorState(state).bun;
+export const burgerIngredientsSelector = (state: RootState) =>
+  selectBurgerConstructorState(state).ingredients;
+
 export const burgerConstructorActions = burgerConstructorSlice.actions;
+
+export default burgerConstructorSlice.reducer;
