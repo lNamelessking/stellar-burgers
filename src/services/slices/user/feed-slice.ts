@@ -1,7 +1,8 @@
 /*Данный слайс используется целиком и полностью для получения общей ленты заказов*/
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { getFeedsApi } from '@api';
+import { getFeedsApi } from '../../../utils/burger-api';
 import { TOrder } from '@utils-types';
+import { RootState } from 'src/services/store';
 
 type TFeedState = {
   feedOrders: TOrder[];
@@ -11,7 +12,7 @@ type TFeedState = {
   feedLoadingError: string | undefined;
 };
 
-const initialState: TFeedState = {
+export const initialState: TFeedState = {
   feedOrders: [],
   totalOrders: 0,
   totalOrdersToday: 0,
@@ -44,17 +45,17 @@ export const feedSlice = createSlice({
         state.feedLoadingError =
           action.error.message || 'Неопознанная ошибка в feedLoadingError';
       });
-  },
-  selectors: {
-    feedOrdersSelector: (state: TFeedState) => state.feedOrders,
-    totalOrdersSelector: (state: TFeedState) => state.totalOrders,
-    totalOrdersTodaySelector: (state: TFeedState) => state.totalOrdersToday,
-    isFeedLoadingSelector: (state: TFeedState) => state.isFeedLoading
   }
 });
 
-export const feedOrdersSelector = feedSlice.selectors.feedOrdersSelector;
-export const totalOrdersSelector = feedSlice.selectors.totalOrdersSelector;
-export const totalOrdersTodaySelector =
-  feedSlice.selectors.totalOrdersTodaySelector;
-export const isFeedLoadingSelector = feedSlice.selectors.isFeedLoadingSelector;
+/*Исправил все экспорты, исправил rootReducer, ибо не до конца разобрался как протестировать
+инициацию rootReducer с combineSlices */
+
+export const feedOrdersSelector = (state: RootState) => state.feed.feedOrders;
+export const totalOrdersSelector = (state: RootState) => state.feed.totalOrders;
+export const totalOrdersTodaySelector = (state: RootState) =>
+  state.feed.totalOrdersToday;
+export const isFeedLoadingSelector = (state: RootState) =>
+  state.feed.isFeedLoading;
+
+export default feedSlice.reducer;

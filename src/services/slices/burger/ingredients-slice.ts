@@ -2,7 +2,8 @@
 
 import { TIngredient } from '@utils-types';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { getIngredientsApi } from '@api';
+import { getIngredientsApi } from '../../../utils/burger-api';
+import { RootState } from 'src/services/store';
 
 type TIngredientsState = {
   ingredients: TIngredient[];
@@ -10,7 +11,7 @@ type TIngredientsState = {
   ingredientsLoadingError: string | undefined;
 };
 
-const initialState: TIngredientsState = {
+export const initialState: TIngredientsState = {
   ingredients: [],
   isIngredientsLoading: false,
   ingredientsLoadingError: undefined
@@ -38,14 +39,15 @@ export const ingredientsSlice = createSlice({
         state.isIngredientsLoading = false;
         state.ingredientsLoadingError = action.error.message;
       });
-  },
-  selectors: {
-    ingredientsSelector: (state) => state.ingredients,
-    isIngredientsLoadingSelector: (state) => state.isIngredientsLoading
   }
 });
 
-export const ingredientsSelector =
-  ingredientsSlice.selectors.ingredientsSelector;
-export const isIngredientsLoadingSelector =
-  ingredientsSlice.selectors.isIngredientsLoadingSelector;
+/*Исправил все экспорты, исправил rootReducer, ибо не до конца разобрался как протестировать
+инициацию rootReducer с combineSlices */
+
+export const ingredientsSelector = (state: RootState) =>
+  state.ingredients.ingredients;
+export const isIngredientsLoadingSelector = (state: RootState) =>
+  state.ingredients.isIngredientsLoading;
+
+export default ingredientsSlice.reducer;

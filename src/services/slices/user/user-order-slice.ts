@@ -3,8 +3,13 @@ Thunk's, обрабатываем их через builder, единственн�
 заказа когда мы закроем модалку готового заказа*/
 
 import { TOrder } from '@utils-types';
-import { getOrderByNumberApi, getOrdersApi, orderBurgerApi } from '@api';
+import {
+  getOrderByNumberApi,
+  getOrdersApi,
+  orderBurgerApi
+} from '../../../utils/burger-api';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { RootState } from 'src/services/store';
 
 type TUserOrdersState = {
   someOrder: TOrder | null;
@@ -14,7 +19,7 @@ type TUserOrdersState = {
   orderLoadingError: string | undefined;
 };
 
-const initialState: TUserOrdersState = {
+export const initialState: TUserOrdersState = {
   someOrder: null,
   userOrder: null,
   userOrders: [],
@@ -80,19 +85,21 @@ export const userOrdersSlice = createSlice({
         state.isOrderLoading = false;
         state.orderLoadingError = action.error.message;
       });
-  },
-  selectors: {
-    userOrderSelector: (state: TUserOrdersState) => state.userOrder,
-    userOrdersSelector: (state: TUserOrdersState) => state.userOrders,
-    someOrderSelector: (state: TUserOrdersState) => state.someOrder,
-    isOrderLoadingSelector: (state: TUserOrdersState) => state.isOrderLoading
   }
 });
 
-export const userOrderSelector = userOrdersSlice.selectors.userOrderSelector;
-export const userOrdersSelector = userOrdersSlice.selectors.userOrdersSelector;
-export const someOrderSelector = userOrdersSlice.selectors.someOrderSelector;
-export const isOrderLoadingSelector =
-  userOrdersSlice.selectors.isOrderLoadingSelector;
+/*Исправил все экспорты, исправил rootReducer, ибо не до конца разобрался как протестировать
+инициацию rootReducer с combineSlices */
+
+export const userOrderSelector = (state: RootState) =>
+  state.userOrders.userOrder;
+export const userOrdersSelector = (state: RootState) =>
+  state.userOrders.userOrders;
+export const someOrderSelector = (state: RootState) =>
+  state.userOrders.someOrder;
+export const isOrderLoadingSelector = (state: RootState) =>
+  state.userOrders.isOrderLoading;
 
 export const userOrderActions = userOrdersSlice.actions;
+
+export default userOrdersSlice.reducer;
